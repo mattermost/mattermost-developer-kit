@@ -1,0 +1,36 @@
+{
+  "name": "mdk",
+  "version": "0.0.1",
+  "description": "Mattermost developer toolkit helper for integration and plugin template generation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mdk": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwilander/mdk.git"
+  },
+  "keywords": [
+    "mattermost",
+    "developer",
+    "toolkit"
+  ],
+  "author": "Joram Wilander",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jwilander/mdk/issues"
+  },
+  "homepage": "https://github.com/jwilander/mdk#readme",
+  "dependencies": {
+    "chalk": "2.1.0",
+    "co": "4.6.0",
+    "co-prompt": "1.0.0",
+    "commander": "2.11.0",
+    "inquirer": "3.2.1",
+    "ncp": "2.0.0",
+    "replace": "0.3.0"
+  }
+}
