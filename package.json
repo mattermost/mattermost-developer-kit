@@ -1,6 +1,6 @@
 {
   "name": "mdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mattermost developer toolkit helper for integration and plugin template generation",
   "main": "index.js",
   "scripts": {
