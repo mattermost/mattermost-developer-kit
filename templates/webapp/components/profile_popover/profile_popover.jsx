@@ -41,6 +41,16 @@ export default class ProfilePopover extends React.PureComponent {
          */
         theme: PropTypes.func.isRequired,
 
+        /*
+         * The CSS absolute left position
+         */
+        positionLeft: PropTypes.number.isRequired,
+
+        /*
+         * The CSS absolute top position
+         */
+        positionTop: PropTypes.number.isRequired,
+
         /* Add custom props here */
 
         /* Define action props here or remove if no actions */
@@ -77,7 +87,11 @@ export default class ProfilePopover extends React.PureComponent {
     render() {
         const style = getStyle(this.props.theme);
         return (
-            <div style={style.container}/>
+            <div
+                style={{...style.container, left: this.props.positionLeft, top: this.props.positionTop}}
+            >
+                {'This is from the example plugin'}
+            </div>
         );
     }
 }
@@ -87,9 +101,11 @@ const getStyle = makeStyleFromTheme((theme) => {
     return {
         container: {
             /* Use the theme object to match component style to the user's theme */
-            backgroundColor: theme.centerChannelColor,
-            height: '20px',
-            width: '20px',
+            backgroundColor: theme.centerChannelBg,
+            position: 'absolute',
+            height: '200px',
+            width: '200px',
+            border: '1px solid black',
             zIndex: 9999 // Bring popover to top
         }
     };

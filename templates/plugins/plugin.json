@@ -2,9 +2,7 @@
     "id": "%plugin_id%",
     "name": "%plugin_name%",
     "description": "%plugin_description%",
-    "frontend": {
-        "webapp": {
-            "bundle_path": "/static/%plugin_id%_bundle.js"
-        }
+    "webapp": {
+        "bundle_path": "/static/%plugin_id%_bundle.js"
     }
 }

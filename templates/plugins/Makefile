@@ -23,20 +23,17 @@ build: .npminstall
 	cd webapp && npm run build
 
 	# Copy files from webapp
-	mkdir dist
-	mkdir dist/webapp
-	cp webapp/dist/* dist/webapp/
+	mkdir -p dist/%plugin_id%/webapp
+	cp webapp/dist/* dist/%plugin_id%/webapp/
 
-	# Copy files from
-	cp plugin.json dist/
+	# Copy plugin files
+	cp plugin.json dist/%plugin_id%/
 
 	# Compress
-	tar -zcvf %plugin_id%.tar.gz dist/*
-	mv %plugin_id%.tar.gz dist/
+	cd dist && tar -zcvf %plugin_id%.tar.gz %plugin_id%/*
 
 	# Clean up temp files
-	rm -f dist/plugin.json
-	rm -rf dist/webapp
+	rm -rf dist/%plugin_id%
 
 	@echo Plugin built at: dist/%plugin_id%.tar.gz
 
