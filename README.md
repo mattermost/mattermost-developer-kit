@@ -15,12 +15,14 @@ To generate a starting point for a webapp (and desktop app) plugin in the curren
 mdk init webapp
 ```
 
-Code your plugin!
-
-
-Once it's ready bulid it with:
+Switch into your the directory for your new project and code your plugin!
 ```
 cd your-plugin
+```
+
+
+Once it's coded and ready, bulid it with:
+```
 make dist
 ```
 
