@@ -49,7 +49,7 @@ After running `mdk init webapp`, and following the steps, you should have a dire
 
 ### index.js
 
-This is the entry point for your webapp plugin. There will already be some initilization code in there that will handle registering your plugin with the Mattermost webapp. If you need to any other set up or initialization then do it in here.
+This is the entry point for your webapp plugin. There will already be some initilization code in there that will handle registering your plugin with the Mattermost webapp. If you need to do any other set up or initialization then do it in here.
 
 ### package.json
 
