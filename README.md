@@ -22,7 +22,7 @@ cd your-plugin
 
 3. Once the plugin is ready, build it:
 ```
-make dist
+make build
 ```
 
 This command will write a distributable of your plugin to `dist/your-plugin.tar.gz`. You can then take this and upload it to your Mattermost server.
