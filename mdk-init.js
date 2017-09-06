@@ -125,7 +125,7 @@ function* webapp() {
         fs.mkdirSync(homePath);
     }
 
-    const pluginPath = `${homePath}/${manifest.name}`;
+    const pluginPath = `${homePath}/${manifest.id}`;
     if (fs.existsSync(pluginPath)) {
         console.log(`A directory already exists at ${pluginPath}. Please remove it or pick a new plugin name`);
         return;

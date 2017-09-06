@@ -39,7 +39,7 @@ export default class ProfilePopover extends React.PureComponent {
         /*
          * Logged in user's theme
          */
-        theme: PropTypes.func.isRequired,
+        theme: PropTypes.object.isRequired,
 
         /*
          * The CSS absolute left position
