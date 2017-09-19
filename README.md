@@ -10,9 +10,9 @@ npm install -g mdk
 
 ## Usage
 
-1. Generate a template for a web and desktop app plugin in the current directory:
+1. Generate a template for a web/desktop app plugin in the current directory:
 ```
-mdk init webapp
+mdk init plugin
 ```
 
 2. Switch into the plugin directory and code your plugin:
@@ -43,7 +43,7 @@ This command will write a distributable of your plugin to `dist/your-plugin.tar.
 
 The [webapp plugin template](https://github.com/mattermost/mdk/tree/master/templates/webapp) contains everything you need to build a plugin for the Mattermost web and desktop apps.
 
-After running `mdk init webapp`, and following the steps above, you should have a directory named after your plugin. Inside that directory you can find a `webapp` directory with these files and directories:
+After running `mdk init plugin`, and following the steps above, you should have a directory named after your plugin. Inside that directory you can find a `webapp` directory with these files and directories:
 
 ### index.js
 

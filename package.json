@@ -1,6 +1,6 @@
 {
   "name": "mdk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Command line tool for generating Mattermost integration and plugin templates",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mattermost/mattermost-mdk.git"
+    "url": "git+https://github.com/mattermost/mattermost-developer-kit.git"
   },
   "keywords": [
     "mattermost",
@@ -29,6 +29,7 @@
     "co": "4.6.0",
     "co-prompt": "1.0.0",
     "commander": "2.11.0",
+    "denodeify": "1.2.1",
     "inquirer": "3.2.1",
     "ncp": "2.0.0",
     "replace": "0.3.0"

@@ -3,5 +3,6 @@
 var program = require('commander');
 
 program
-  .command('init', 'Initialize an integration or plugin template')
-  .parse(process.argv);
+    .version('0.0.4')
+    .command('init', 'Initialize an integration or plugin template')
+    .parse(process.argv);
