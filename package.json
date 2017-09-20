@@ -1,6 +1,6 @@
 {
   "name": "mdk",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Command line tool for generating Mattermost integration and plugin templates",
   "main": "index.js",
   "scripts": {
