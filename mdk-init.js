@@ -7,6 +7,7 @@ const os = require('os');
 const denodeify = require('denodeify');
 const ncp = denodeify(require('ncp').ncp)
 const replace = require('replace');
+const chalk = require('chalk');
 
 const WEBAPP_COMPONENTS = {
     ProfilePopover: 'profile_popover'
@@ -21,16 +22,15 @@ program
     .option('-c, --components <components>', 'Comma separated list of components to override')
     .option('-p, --post-types <post-types>', 'Comma separated list of post types')
     .option('-S, --skip-prompts', 'Skip optional user input prompts')
+    .option('-q, --quiet', 'Suppress non-error messages')
     .action((type) => {
-        console.log('Performing setup for webapp plugin...');
-
         let generator;
         switch (type) {
             case 'plugin':
                 generator = plugin;
                 break;
             default:
-                console.log(`Unsupported type: ${type}`);
+                log(`Unsupported type: ${type}`);
                 return;
         }
 
@@ -59,24 +59,27 @@ function replaceTemplatePlaceholders(manifest, path, customReplacements = []) {
 }
 
 function* plugin() {
+    log(chalk.underline.bold.cyan('Plugin Generation'));
+    log();
+
     const manifest = {};
 
     if (typeof program.name === 'string') {
-        console.log(`Plugin name: ${program.name}`);
+        log(chalk.bold('Plugin name: ') + program.name);
         manifest.name = program.name;
     } else {
-        manifest.name = yield prompt('Plugin name: ');
+        manifest.name = yield prompt(chalk.bold('Plugin name: '));
     }
 
     manifest.id = manifest.name.toLowerCase().trim().replace(/\s+/g, '-');
 
     if (typeof program.description === 'string') {
-        console.log(`Description: ${program.description}`);
+        log(chalk.bold('Description: ') + program.description);
         manifest.description = program.description;
     } else if (program.skipPrompts) {
         manifest.description = '';
     } else {
-        manifest.description = yield prompt('Description: ');
+        manifest.description = yield prompt(chalk.bold('Description: '));
     }
 
     const optionsForWebapp = yield* webappOptions();
@@ -90,8 +93,8 @@ function* plugin() {
 
     const pluginPath = `${homePath}/${manifest.id}`;
     if (fs.existsSync(pluginPath)) {
-        console.log(`A directory already exists at ${pluginPath}. Please remove it or pick a new plugin name.`);
-        return;
+        console.error(chalk.red(`A directory already exists at ${pluginPath}. Please remove it or pick a new plugin name.`));
+        process.exit(1);
     }
 
     fs.mkdirSync(pluginPath);
@@ -100,24 +103,28 @@ function* plugin() {
         replaceTemplatePlaceholders(manifest, pluginPath);
 
         webappComplete(manifest, optionsForWebapp, pluginPath).then(() => {
-            console.log();
-            console.log(`Plugin generated at: ${pluginPath}`);
+            log();
+            log(chalk.bold.magenta('Plugin generated at: ') + pluginPath);
             process.exit(0);
         });
     });
 }
 
 function* webappOptions() {
+    log();
+    log(chalk.bold.cyan('Webapp'));
+    log();
+
     let components = [];
     if (typeof program.components === 'string') {
         components = cleanComponentInput(program.components.replace(/\s+/g, '').split(','));
-        console.log(`Components: ${components}`);
+        log(chalk.bold('Components: ') + components);
     } else if (!program.skipPrompts) {
         const results = yield inquirer.prompt([
             {
                 type: 'checkbox',
                 name: 'components',
-                message: 'Select webapp components to override',
+                message: chalk.bold('Override Components: '),
                 choices: Object.keys(WEBAPP_COMPONENTS)
             }
         ]);
@@ -127,10 +134,10 @@ function* webappOptions() {
 
     let postTypes = [];
     if (typeof program.postTypes === 'string') {
-        console.log(`Post Types: ${program.postTypes}`);
+        log(chalk.bold('Post Types: ') + program.postTypes);
         postTypes = program.postTypes.replace(/\s+/g, '').split(',');
     } else if (!program.skipPrompts) {
-        postTypes = (yield prompt('Post Types (comma separated, leave blank to skip): ')).replace(/\s+/g, '').split(',');
+        postTypes = (yield prompt(chalk.bold('Post Types (comma separated, leave blank to skip): '))).replace(/\s+/g, '').split(',');
     }
 
     return {components, postTypes};
@@ -212,7 +219,7 @@ function cleanComponentInput(components) {
     const webappComponents = Object.keys(WEBAPP_COMPONENTS);
     while (i--) {
         if (!webappComponents.includes(components[i])) {
-            console.log(`WARNING: Unsupported component '${components[i]}' ignored`);
+            log(`WARNING: Unsupported component '${components[i]}' ignored`);
             components.splice(i, 1);
         }
     }
@@ -228,3 +235,9 @@ function toTitleCase(str)
 Array.prototype.diff = function(a) {
     return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
+
+function log(message = '') {
+    if (!program.quiet) {
+        console.log(message);
+    }
+}

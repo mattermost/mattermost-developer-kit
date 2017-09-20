@@ -2,6 +2,8 @@
 
 mdk is a tool for generating and managing templates for Mattermost integrations and plugins.
 
+The tool is still experimental and subject to changes.
+
 ## Install
 
 ```
