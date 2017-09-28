@@ -9,6 +9,23 @@ const ncp = denodeify(require('ncp').ncp)
 const replace = require('replace');
 const chalk = require('chalk');
 
+const WEBAPP_COMPONENTS = {
+    ProfilePopover: 'profile_popover'
+};
+
+const INTEGRATION_TYPES = [
+    'rest_api',
+    'incoming_webhook (coming soon)',
+    'outgoing_webhook (coming soon)',
+    'slash_command (coming soon)'
+];
+
+const AUTH_METHODS = [
+    'personal_access_token',
+    'email_password (coming soon)',
+    'oauth2 (coming soon)'
+];
+
 ncp.limit = 16;
 
 program
@@ -41,10 +58,6 @@ program
 // ---------------------------------------------------
 // Plugin Functions
 // ---------------------------------------------------
-
-const WEBAPP_COMPONENTS = {
-    ProfilePopover: 'profile_popover'
-};
 
 function* plugin() {
     log(chalk.underline.bold.cyan('Plugin Generation'));
@@ -125,7 +138,10 @@ function* webappOptions() {
         log(chalk.bold('Post Types: ') + program.postTypes);
         postTypes = program.postTypes.replace(/\s+/g, '').split(',');
     } else if (!program.skipPrompts) {
-        postTypes = (yield prompt(chalk.bold('Post Types (comma separated, leave blank to skip): '))).replace(/\s+/g, '').split(',');
+        const input = (yield prompt(chalk.bold('Post Types (comma separated, leave blank to skip): '))).replace(/\s+/g, '');
+        if (input) {
+            postTypes = input.split(',');
+        }
     }
 
     return {components, postTypes};
@@ -201,19 +217,6 @@ async function webappComplete(manifest, options, path) {
 // ---------------------------------------------------
 // Integration Functions
 // ---------------------------------------------------
-
-const INTEGRATION_TYPES = [
-    'rest_api',
-    'incoming_webhook',
-    'outgoing_webhook',
-    'slash_command'
-];
-
-const AUTH_METHODS = [
-    'personal_access_token',
-    'email_password',
-    'oauth2'
-];
 
 function* integration() {
     log(chalk.underline.bold.cyan('Integration Generation'));
