@@ -1,73 +1,42 @@
-# Mattermost Bot Sample
+# README for %plugin_name%
 
-## Overview
+Add README information for your integration here.
 
-This sample Bot shows how to use the Mattermost [Go driver](https://github.com/mattermost/platform/blob/master/model/client.go) to interact with a Mattermost server, listen to events and respond to messages. Documentation for the Go driver can be found [here](https://godoc.org/github.com/mattermost/platform/model#Client).
+## Template
 
-Highlights of APIs used in this sample:
- - Log in to the Mattermost server
- - Create a channel
- - Modify user attributes 
- - Connect and listen to WebSocket events for real-time responses to messages
- - Post a message to a channel
+Everything you need to build your integration is present in this directory.
 
-## Setup Server Environment
+### main.go
 
-1 - [Install](http://docs.mattermost.com/install/requirements.html) or [upgrade](https://docs.mattermost.com/administration/upgrade.html) to Mattermost server version 3.10+, and verify that the Mattermost server is running on [http://localhost:8065](http://localhost:8065). 
+This is the entry point for your integration. By default it does the following:
 
-This Bot Sample was tested with Mattermost server version 3.10.0.
+* Loads a config file
+* Uses the Go driver to get a channel by name and by team
+* Posts messages to the channel on startup and shutdown
+* Connects to the WebSocket and listens for new post events
 
-2 - Create a team for the Bot to run. If you have an existing team, you may skip this step and replace `team_name` with your existing team in subsequent steps.
-```
-./bin/platform team create --name botsample --display_name "Sample Bot playground" --email "admin@example.com"
-```
-3 - Create the user account the Bot will run as.
-```
-./bin/platform user create --email="bot@example.com" --password="password1" --username="samplebot"
-```
-4 - Create a second user, `bill`, which we will use to log in and interact with the Bot.
-```
-./bin/platform user create --email="bill@example.com" --password="password1" --username="bill"
-```
-5 - (Optional) Give `bill` `system_admin` permissions.
-```
-./bin/platform roles system_admin bill
-```
-6 - Add users to the team
-```
-./bin/platform team add botsample samplebot bill
-```
-7 - Verify the e-mail address
-```
-./bin/platform user verify samplebot
-```
-8 - Log in to [http://localhost:8065](http://localhost:8065) as `bill` and verify the account was created successfully. Then, navigate to the `botsample` team you created in step 2 to interact with the Bot.
+Modify this file to suit your purposes. You may want to split your integration into multiple files.
 
-## Setup Bot Development Environment
+### config.json
 
-1 - Follow the [Developer Machine Setup](https://docs.mattermost.com/developer/dev-setup.html) instructions to setup the bot development environment.
+The JSON configuration file for your integration. Use this to define the configuration settings for your plugin. Some settings already exist as examples.
 
-2 - Clone the GitHub repository to run the sample.
-```
-git clone https://github.com/mattermost/mattermost-bot-sample-golang.git
-cd mattermost-bot-sample-golang
-```
-3 - Start the Bot.
-```
-make run
-```
-You can verify the Bot is running when 
-  - `Server detected and is running version 3.X.X` appears on the command line.
-  - `Mattermost Bot Sample has started running` is posted in the `Debugging For Sample Bot` channel.
+Optionally, replace the configuration file with your own method (environment variables, YAML, etc.).
 
-## Test the Bot
+### Makefile
 
-1 - Log in to the Mattermost server as `bill@example.com` and `password1.`
+A pre-built Makefile containing some useful commands:
 
-2 - Join the `Debugging For Sample Bot` channel.
+* `make run` - Run the integration
+* `make dist` - Build and package the integration for Linux, Mac OSX and Windows
+* `make clean` - Clean temporary files, previous builds, etc.
 
-3 - Post a message in the channel such as `are you running?` to see if the Bot responds. You should see a response similar to `Yes I'm running` if the Bot is running.
+Modify the Makefile to suit your needs as necessary.
 
-## Stop the Bot
+### vendor
 
-1 - In the terminal window, press `CTRL+C` to stop the bot. You should see `Mattermost Bot Sample has stopped running` posted in the `Debugging For Sample Bot` channel.
+Dependencies for your integration live in this directory. [Glide](https://github.com/Masterminds/glide) is used to manage dependencies. The Mattermost Go driver is already included. Symlinks are used in the Makefile to avoid requiring your integration to be under GOPATH.
+
+### glide.yaml and glide.lock
+
+[See the glide documentation.](https://github.com/Masterminds/glide#how-it-works)

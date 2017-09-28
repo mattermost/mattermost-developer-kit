@@ -1,4 +1,4 @@
-package: github.com/mattermost/mattermost-bot-sample-golang
+package: .
 import:
 - package: github.com/mattermost/mattermost-server
   version: master
