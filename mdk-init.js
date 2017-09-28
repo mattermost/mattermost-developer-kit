@@ -30,10 +30,12 @@ ncp.limit = 16;
 
 program
     .arguments('<type>')
-    .option('-n, --name <name>', 'The name of the plugin')
-    .option('-d, --description <description>', 'A brief description of the plugin')
-    .option('-c, --components <components>', 'Comma separated list of components to override')
-    .option('-p, --post-types <post-types>', 'Comma separated list of post types')
+    .option('-n, --name <name>', 'Name of the plugin/integration')
+    .option('-d, --description <description>', '(Plugins) Brief description of the plugin')
+    .option('-c, --components <components>', '(Plugins) Comma separated list of components to override')
+    .option('-p, --post-types <post-types>', '(Plugins) Comma separated list of post types')
+    .option('-t, --type <type>', '(Integrations) Type of integration to generate')
+    .option('-a, --auth-method <auth-method>', '(REST API) Authentication method for the integration')
     .option('-S, --skip-prompts', 'Skip optional user input prompts')
     .option('-q, --quiet', 'Suppress non-error messages')
     .action((type) => {
@@ -236,6 +238,7 @@ function* integration() {
     let type = '';
     if (typeof program.type === 'string') {
         log(chalk.bold('Integration Type: ') + program.type);
+        type = program.type;
     } else if (!program.skipPrompts) {
         const results = yield inquirer.prompt([
             {
@@ -292,6 +295,7 @@ function* restApiOptions() {
     let authMethod = '';
     if (typeof program.authMethod === 'string') {
         log(chalk.bold('Authentication Method: ') + program.authMethod);
+        authMethod = program.authMethod;
     } else if (!program.skipPrompts) {
         const results = yield inquirer.prompt([
             {
