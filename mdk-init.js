@@ -9,10 +9,6 @@ const ncp = denodeify(require('ncp').ncp)
 const replace = require('replace');
 const chalk = require('chalk');
 
-const WEBAPP_COMPONENTS = {
-    ProfilePopover: 'profile_popover'
-};
-
 ncp.limit = 16;
 
 program
@@ -29,6 +25,9 @@ program
             case 'plugin':
                 generator = plugin;
                 break;
+            case 'integration':
+                generator = integration;
+                break;
             default:
                 log(`Unsupported type: ${type}`);
                 return;
@@ -39,24 +38,13 @@ program
     .parse(process.argv);
 
 
-function replaceTemplatePlaceholders(manifest, path, customReplacements = []) {
-    const replacements = [
-        {regex: '%plugin_name%', replacement: manifest.name},
-        {regex: '%plugin_id%', replacement: manifest.id},
-        {regex: '%plugin_description%', replacement: manifest.description},
-        ...customReplacements
-    ];
+// ---------------------------------------------------
+// Plugin Functions
+// ---------------------------------------------------
 
-    replacements.forEach((r) => {
-        replace({
-            regex: r.regex,
-            replacement: r.replacement,
-            paths: [path],
-            recursive: true,
-            silent: true
-        });
-    });
-}
+const WEBAPP_COMPONENTS = {
+    ProfilePopover: 'profile_popover'
+};
 
 function* plugin() {
     log(chalk.underline.bold.cyan('Plugin Generation'));
@@ -211,8 +199,140 @@ async function webappComplete(manifest, options, path) {
 }
 
 // ---------------------------------------------------
+// Integration Functions
+// ---------------------------------------------------
+
+const INTEGRATION_TYPES = [
+    'rest_api',
+    'incoming_webhook',
+    'outgoing_webhook',
+    'slash_command'
+];
+
+const AUTH_METHODS = [
+    'personal_access_token',
+    'email_password',
+    'oauth2'
+];
+
+function* integration() {
+    log(chalk.underline.bold.cyan('Integration Generation'));
+    log();
+
+    const manifest = {};
+
+    if (typeof program.name === 'string') {
+        log(chalk.bold('Integration name: ') + program.name);
+        manifest.name = program.name;
+    } else {
+        manifest.name = yield prompt(chalk.bold('Integration name: '));
+    }
+
+    manifest.id = manifest.name.toLowerCase().trim().replace(/\s+/g, '-');
+
+    let type = '';
+    if (typeof program.type === 'string') {
+        log(chalk.bold('Integration Type: ') + program.type);
+    } else if (!program.skipPrompts) {
+        const results = yield inquirer.prompt([
+            {
+                type: 'list',
+                name: 'type',
+                message: chalk.bold('Integration Type: '),
+                choices: INTEGRATION_TYPES
+            }
+        ]);
+
+        type = results.type;
+    }
+
+    if (type !== 'rest_api') {
+        console.error(chalk.red(`Unsupported type: ${type}`));
+        process.exit(1);
+    }
+
+    const typeOptions = yield* restApiOptions();
+
+    if (typeOptions.authMethod !== 'personal_access_token') {
+        console.error(chalk.red(`Unsupported authentication method: ${typeOptions.authMethod}`));
+        process.exit(1);
+    }
+
+    const homePath = `${(process.env.MDK_PLUGIN_PATH || process.cwd())}`;
+
+    // Create home directory if not exists
+    if (!fs.existsSync(homePath)) {
+        fs.mkdirSync(homePath);
+    }
+
+    const integrationPath = `${homePath}/${manifest.id}`;
+    if (fs.existsSync(integrationPath)) {
+        console.error(chalk.red(`A directory already exists at ${integrationPath}. Please remove it or pick a new integration name.`));
+        process.exit(1);
+    }
+
+    fs.mkdirSync(integrationPath);
+
+
+    restApiComplete(manifest, typeOptions, integrationPath).then(() => {
+        log();
+        log(chalk.bold.magenta('Plugin generated at: ') + integrationPath);
+        process.exit(0);
+    });
+}
+
+function* restApiOptions() {
+    log();
+    log(chalk.bold.cyan('REST API'));
+    log();
+
+    let authMethod = '';
+    if (typeof program.authMethod === 'string') {
+        log(chalk.bold('Authentication Method: ') + program.authMethod);
+    } else if (!program.skipPrompts) {
+        const results = yield inquirer.prompt([
+            {
+                type: 'list',
+                name: 'authMethod',
+                message: chalk.bold('Authentication Method: '),
+                choices: AUTH_METHODS
+            }
+        ]);
+
+        authMethod = results.authMethod;
+    }
+
+    return {authMethod};
+}
+
+async function restApiComplete(manifest, options, path) {
+    // Copy all rest api template files
+    await ncp(__dirname + '/templates/rest-api', path);
+    replaceTemplatePlaceholders(manifest, path);
+}
+
+// ---------------------------------------------------
 // Helper Functions
 // ---------------------------------------------------
+
+function replaceTemplatePlaceholders(manifest, path, customReplacements = []) {
+    const replacements = [
+        {regex: '%plugin_name%', replacement: manifest.name},
+        {regex: '%plugin_id%', replacement: manifest.id},
+        {regex: '%plugin_description%', replacement: manifest.description},
+        ...customReplacements
+    ];
+
+    replacements.forEach((r) => {
+        replace({
+            regex: r.regex,
+            replacement: r.replacement,
+            paths: [path],
+            recursive: true,
+            silent: true
+        });
+    });
+}
 
 function cleanComponentInput(components) {
     let i = components.length;

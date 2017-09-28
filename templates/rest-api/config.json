@@ -1,0 +1,9 @@
+{
+  "name": "%plugin_name%",
+  "mattermost_url": "http://localhost:8065",
+  "personal_access_token": "",
+  "bot_name": "Mattermost Bot",
+  "bot_icon_url": "https://www.mattermost.org/wp-content/uploads/2016/04/icon.png",
+  "team_name": "",
+  "channel_name": ""
+}
