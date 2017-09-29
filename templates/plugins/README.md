@@ -8,7 +8,7 @@ Description of the plugin specific files.
 
 ### plugin.json
 
-Metadata for your plugin that the Mattermost will read. Feel free to modify the values but do not change the structure.
+Metadata for your plugin that the Mattermost server will read. Feel free to modify the values but do not change the structure.
 
 ### Makefile
 
