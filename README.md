@@ -77,7 +77,7 @@ This command will write a distributable of your plugin to `dist/your-plugin.tar.
 Explanations of each of the different templates can be found in their respective READMEs:
 
 * [Plugins](https://github.com/mattermost/mdk/tree/master/templates/plugins/README.md#template)
- * [Webapp](https://github.com/mattermost/mdk/tree/master/templates/webapp/README.md#template)
+  * [Webapp](https://github.com/mattermost/mdk/tree/master/templates/webapp/README.md#template)
 * Integrations
- * [REST API](https://github.com/mattermost/mdk/tree/master/templates/rest-api/README.md#template)
+  * [REST API](https://github.com/mattermost/mdk/tree/master/templates/rest-api/README.md#template)
 
