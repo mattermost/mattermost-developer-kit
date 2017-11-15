@@ -1,4 +1,4 @@
-import React from 'react';
+const React = window.react;
 import PropTypes from 'prop-types';
 import {makeStyleFromTheme} from 'mattermost-redux/utils/theme_utils';
 

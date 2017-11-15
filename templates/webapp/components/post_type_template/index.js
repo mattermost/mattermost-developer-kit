@@ -1,5 +1,5 @@
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+const {connect} = window['react-redux'];
+const {bindActionCreators} = window.redux;
 
 import PostType%Type% from './post_type_%type%.jsx';
 

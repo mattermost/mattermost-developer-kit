@@ -3,12 +3,8 @@
   "version": "1.0.0",
   "description": "%plugin_description%",
   "dependencies": {
-    "mattermost-redux": "mattermost/mattermost-redux#npmtest",
+    "mattermost-redux": "1.0.1",
     "prop-types": "15.5.10",
-    "react": "15.6.1",
-    "react-dom": "15.6.1",
-    "react-intl": "2.3.0",
-    "react-redux": "5.0.6",
     "superagent": "3.5.2"
   },
   "devDependencies": {

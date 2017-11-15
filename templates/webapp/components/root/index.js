@@ -1,7 +1,7 @@
 const {connect} = window['react-redux'];
 const {bindActionCreators} = window.redux;
 
-import ProfilePopover from './profile_popover.jsx';
+import Root from './root.jsx';
 
 function mapStateToProps(state, ownProps) {
     /* Provide values for any custom props or override any existing props here */
@@ -18,4 +18,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfilePopover);
+export default connect(mapStateToProps, mapDispatchToProps)(Root);

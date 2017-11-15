@@ -10,7 +10,8 @@ const replace = require('replace');
 const chalk = require('chalk');
 
 const WEBAPP_COMPONENTS = {
-    ProfilePopover: 'profile_popover'
+    ProfilePopover: 'profile_popover',
+    Root: 'root'
 };
 
 const INTEGRATION_TYPES = [
